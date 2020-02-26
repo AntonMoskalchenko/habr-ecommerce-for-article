@@ -40,7 +40,7 @@ module.exports = {
     // { src: '~~/plugins/normal-analytics.js', mode: 'client' },
     // { src: '~~/plugins/no-ssr-plugins.js', mode: 'client' },
     // // { src: '~~/plugins/vuetify.js' },
-    // { src: '~~/plugins/lazy-load.js' }
+    { src: '~~/plugins/vue-lazy-load.js' }
   ],
   modules: [
     // Doc: https://axios.nuxtjs.org/usage

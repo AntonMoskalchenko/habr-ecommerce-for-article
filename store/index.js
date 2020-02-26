@@ -2,42 +2,63 @@
 const sleep = m => new Promise(r => setTimeout(r, m))
 const categories = [
   {
+    id: 'cats',
     cTitle: 'Котики',
     cName: 'Котики',
     cSlug: 'cats',
     cMetaDescription: 'Мета описание',
     cDesc: 'Описание',
-    cImage: 'https://source.unsplash.com/300x300/?cat,cats'
+    cImage: 'https://source.unsplash.com/300x300/?cat,cats',
+    products: []
   },
   {
+    id: 'dogs',
     cTitle: 'Собачки',
     cName: 'Собачки',
     cSlug: 'dogs',
     cMetaDescription: 'Мета описание',
     cDesc: 'Описание',
-    cImage: 'https://source.unsplash.com/300x300/?dog,dogs'
+    cImage: 'https://source.unsplash.com/300x300/?dog,dogs',
+    products: []
   },
   {
+    id: 'wolfs',
     cTitle: 'Волчки',
     cName: 'Волчки',
     cSlug: 'wolfs',
     cMetaDescription: 'Мета описание',
     cDesc: 'Описание',
-    cImage: 'https://source.unsplash.com/300x300/?wolf'
+    cImage: 'https://source.unsplash.com/300x300/?wolf',
+    products: []
   },
   {
+    id: 'bulls',
     cTitle: 'Бычки',
     cName: 'Бычки',
     cSlug: 'bulls',
     cMetaDescription: 'Мета описание',
     cDesc: 'Описание',
-    cImage: 'https://source.unsplash.com/300x300/?bull'
+    cImage: 'https://source.unsplash.com/300x300/?bull',
+    products: []
   }
 ]
-
+function addProductsToCategory (products, category) {
+  products.map(p => {
+    if (p.category_id === category.id) {
+      category.products.push({
+        id: p.id,
+        pName: p.pName,
+        pSlug: p.pSlug,
+        pPrice: p.pPrice,
+        image: `https://source.unsplash.com/300x300/?${p.pName}`
+      })
+    }
+  })
+}
 export const state = () => ({
   categoriesList: [],
-  currentCategory: {}
+  currentCategory: {},
+  currentProduct: {}
 })
 export const mutations = {
   SET_CATEGORIES_LIST (state, categories) {
@@ -45,6 +66,9 @@ export const mutations = {
   },
   SET_CURRENT_CATEGORY (state, category) {
     state.currentCategory = category
+  },
+  SET_CURRENT_PRODUCT (state, product) {
+    state.currentProduct = product
   }
 }
 export const actions = {
@@ -60,6 +84,13 @@ export const actions = {
   async getCurrentCategory ({ commit }, { route }) {
     await sleep(1000)
     const category = categories.find((cat) => cat.cSlug === route.params.CategorySlug)
+    const products = await this.$axios.$get('/mock/products.json')
+    addProductsToCategory(products, category)
     await commit('SET_CURRENT_CATEGORY', category)
+  },
+  async getCurrentProduct ({ commit }, { route }) {
+    await sleep(1000)
+    // const product = products.find((prod) => prod.cSlug === route.params.ProductSlug)
+    await commit('SET_CURRENT_PRODUCT', product)
   }
 }
