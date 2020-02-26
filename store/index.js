@@ -43,9 +43,10 @@ const categories = [
   }
 ]
 function addProductsToCategory (products, category) {
+  const categoryInner = { ...category, products: [] }
   products.map(p => {
     if (p.category_id === category.id) {
-      category.products.push({
+      categoryInner.products.push({
         id: p.id,
         pName: p.pName,
         pSlug: p.pSlug,
@@ -54,6 +55,7 @@ function addProductsToCategory (products, category) {
       })
     }
   })
+  return categoryInner
 }
 export const state = () => ({
   categoriesList: [],
@@ -85,12 +87,7 @@ export const actions = {
     await sleep(1000)
     const category = categories.find((cat) => cat.cSlug === route.params.CategorySlug)
     const products = await this.$axios.$get('/mock/products.json')
-    addProductsToCategory(products, category)
-    await commit('SET_CURRENT_CATEGORY', category)
-  },
-  async getCurrentProduct ({ commit }, { route }) {
-    await sleep(1000)
-    // const product = products.find((prod) => prod.cSlug === route.params.ProductSlug)
-    await commit('SET_CURRENT_PRODUCT', product)
+
+    await commit('SET_CURRENT_CATEGORY', addProductsToCategory(products, category))
   }
 }
